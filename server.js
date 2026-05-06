@@ -52,7 +52,6 @@ app.post('/api/ratings/:id', (req, res) => {
   const oldRating = userRatings[userId]?.[id] || 0;
   ratingsDB[id].count = Math.max(ratingsDB[id].count, 1);
 
-  // Recalculate average with the new rating
   const totalBefore = ratingsDB[id].value * ratingsDB[id].count;
   const newTotal = totalBefore - oldRating + newRating;
   ratingsDB[id].value = parseFloat((newTotal / ratingsDB[id].count).toFixed(1));
@@ -85,7 +84,6 @@ app.put('/api/ratings/:id', (req, res) => {
   // Get previous rating for this user
   const prevRating = userRatings[userId]?.[id] || 0;
 
-  // Update product rating stats
   const totalBefore = ratingsDB[id].value * ratingsDB[id].count;
   const newTotal = totalBefore - prevRating + updatedRating;
   ratingsDB[id].value = parseFloat((newTotal / ratingsDB[id].count).toFixed(1));
@@ -107,11 +105,9 @@ app.delete('/api/ratings/:id', (req, res) => {
     return res.status(404).json({ error: 'Rating not found' });
   }
 
-  // Get the user's rating to remove
   const userRating = userRatings[userId]?.[id] || 0;
 
   if (userRating > 0) {
-    // Update product rating stats
     const totalBefore = ratingsDB[id].value * ratingsDB[id].count;
     const newTotal = totalBefore - userRating;
     ratingsDB[id].value = parseFloat((newTotal / ratingsDB[id].count).toFixed(1));

@@ -10,7 +10,6 @@ const Rating = ({ id }) => {
   const [feedback, setFeedback] = useState(null);
   const [hasRated, setHasRated] = useState(false);
 
-  // Generate a unique user ID for this session
   const userId = 'user-' + Math.random().toString(36).substring(2, 9);
 
   useEffect(() => {
@@ -78,7 +77,6 @@ const Rating = ({ id }) => {
     setSubmitting(true);
     setFeedback(null);
     try {
-      // First update server
       const putResponse = await fetch(`/api/ratings/${id}`, {
         method: 'PUT',
         headers: {
@@ -92,7 +90,6 @@ const Rating = ({ id }) => {
         throw new Error('Failed to update rating');
       }
 
-      // Then refetch to get updated average
       const getResponse = await fetch(`/api/ratings/${id}`);
       if (!getResponse.ok) {
         throw new Error('Failed to fetch updated rating');
@@ -113,7 +110,6 @@ const Rating = ({ id }) => {
     setSubmitting(true);
     setFeedback(null);
     try {
-      // First delete from server
       const deleteResponse = await fetch(`/api/ratings/${id}`, {
         method: 'DELETE',
         headers: {
@@ -125,7 +121,6 @@ const Rating = ({ id }) => {
         throw new Error('Failed to delete rating');
       }
 
-      // Then refetch to get updated rating
       const getResponse = await fetch(`/api/ratings/${id}`);
       if (!getResponse.ok) {
         throw new Error('Failed to fetch updated rating');
