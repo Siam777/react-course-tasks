@@ -1,7 +1,9 @@
 import Rating from './components/Rating'
 function App() {
   return (
-     <Rating />
+    <>  
+      <Rating heading='How do you feel about React?' color='red'/>
+    </>
   )
 }
 
