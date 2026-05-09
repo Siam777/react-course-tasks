@@ -1,9 +1,16 @@
 import NoteForm from "./components/NoteForm";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import NoteList from "./components/NoteList";
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = localStorage.getItem('notes');
+    return savedNotes ? JSON.parse(savedNotes) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
   const deleteNotes = (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this note?");
     if (!confirmDelete) return;
