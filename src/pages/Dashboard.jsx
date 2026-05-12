@@ -19,8 +19,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchCoins = async () => {
+      // Map our local sortBy to Coingecko valid 'order' values
+      const apiOrder = sortBy.startsWith('market_cap') ? sortBy : 'market_cap_desc';
+      
       try {
-        const response = await fetch(`${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`);
+        const response = await fetch(`${API_URL}&order=${apiOrder}&per_page=${limit}&page=1&sparkline=false`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -36,7 +39,7 @@ const Dashboard = () => {
     }
 
     fetchCoins();
-  }, [limit]);
+  }, [limit, sortBy]);
 
   const handleLogout = async () => {
     await logout();

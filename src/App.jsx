@@ -12,6 +12,8 @@ import './App.css';
 
 import NotFoundPage from './pages/not-found';
 
+import TimerApp from './pages/TimerApp';
+
 function App() {
   return (
     <Router>
@@ -26,6 +28,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/products" element={<ProductCRUD />} />
+              <Route path="/timer" element={<TimerApp />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/coin/:id" element={<CoinDetailsPage />} />
             </Route>

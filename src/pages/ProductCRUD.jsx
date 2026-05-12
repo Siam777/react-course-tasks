@@ -10,6 +10,7 @@ const ProductCRUD = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [editingProduct, setEditingProduct] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -20,55 +21,84 @@ const ProductCRUD = () => {
     navigate('/login');
   };
 
+  const handleEdit = (product) => {
+    setEditingProduct(product);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSave = () => {
+    setEditingProduct(null);
+    setShowForm(false);
+  };
+
   return (
     <div className="dashboard-container">
       <Header user={user} onLogout={handleLogout} />
       
-      <div className="container">
-        <ProductForm 
-          editingProduct={editingProduct} 
-          clearEditing={() => setEditingProduct(null)} 
-        />
+      <div className="container" style={{ paddingBottom: '5rem' }}>
+        {showForm ? (
+          <div className="form-view">
+             <button 
+                onClick={() => { setShowForm(false); setEditingProduct(null); }} 
+                className="back-link" 
+                style={{ marginBottom: '2rem' }}
+              >
+                ← Back to List
+              </button>
+              <ProductForm 
+                editingProduct={editingProduct} 
+                onSave={handleSave}
+                clearEditing={() => { setEditingProduct(null); setShowForm(false); }} 
+              />
+          </div>
+        ) : (
+          <div className="list-view">
+            <div className="add-product-banner">
+              <div>
+                <h2>Product Inventory</h2>
+                <p>Manage your professional catalog with ease</p>
+              </div>
+              <button className="btn-add" onClick={() => setShowForm(true)}>
+                + Create Product
+              </button>
+            </div>
 
-        <div style={{ marginTop: '4rem' }}>
-          <h2>Your Products</h2>
-          {loading && <p>Loading products...</p>}
-          
-          <div className="grid" style={{ marginTop: '2rem' }}>
-            {products.length > 0 ? products.map((product) => (
-              <div key={product._id} className="coin-card" style={{ cursor: 'default' }}>
-                <div className="coin-header">
+            {loading && <p>Loading your products...</p>}
+            
+            <div className="product-grid">
+              {products.length > 0 ? products.map((product) => (
+                <div key={product._id} className="product-card">
                   <div>
+                    <div className="product-category">{product.category}</div>
                     <h3>{product.name}</h3>
-                    <p className="symbol">{product.category}</p>
+                    <div className="product-price">${product.price.toLocaleString()}</div>
+                    <p className="product-desc">{product.description}</p>
+                  </div>
+                  
+                  <div className="product-actions">
+                    <button 
+                      onClick={() => handleEdit(product)}
+                      className="btn-icon btn-edit"
+                    >
+                      <span>✎</span> Edit
+                    </button>
+                    <button 
+                      onClick={() => deleteProduct(product._id)}
+                      className="btn-icon btn-delete"
+                    >
+                      <span>🗑</span> Delete
+                    </button>
                   </div>
                 </div>
-                <div className="coin-price">${product.price}</div>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                  {product.description}
-                </p>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <button 
-                    onClick={() => setEditingProduct(product)}
-                    className="auth-btn"
-                    style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => deleteProduct(product._id)}
-                    className="logout-btn"
-                    style={{ padding: '0.5rem', fontSize: '0.8rem' }}
-                  >
-                    Delete
-                  </button>
+              )) : !loading && (
+                <div style={{ textAlign: 'center', gridColumn: '1/-1', padding: '4rem' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>No products found. Start by creating one!</p>
                 </div>
-              </div>
-            )) : (
-              <p>No products found. Add one above!</p>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ const Header = ({ user, onLogout }) => {
             <div className="nav-links">
                 <Link to="/">Home</Link>
                 <Link to="/products">Products</Link>
+                <Link to="/timer">Timer</Link>
                 <Link to="/about">About</Link>
             </div>
             {user && (
