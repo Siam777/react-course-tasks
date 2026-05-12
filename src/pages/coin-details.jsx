@@ -15,7 +15,6 @@ const CoinDetailsPage = () => {
                     throw new Error('Failed to fetch coin details');
                 }
                 const data = await response.json();
-                console.log('Fetched coin details:', data);
                 setCoin(data);
                 setLoading(false);
             } catch (error) {
@@ -28,33 +27,87 @@ const CoinDetailsPage = () => {
         fetchCoinDetails();
     }, [id]);
 
+    if (loading) return <div className="container"><h1>Loading...</h1></div>;
+    if (error) return <div className="container"><h1>Error: {error}</h1></div>;
+    if (!coin) return null;
+
     return (
-        <div className="coin-details-container">
-            <Link to="/" className="back-link">← Back to Home</Link>
-            <h1 className='coin-details-title'>{coin ? `${coin.name} (${coin.symbol.toUpperCase()})` : 'Coin Details'}</h1>
-            {loading && <p>Loading...</p>}
-            {error && <div className="error">Error: {error}</div>}
-            {!loading && !error && coin && (
-                <>
-                    <div className="coin-details-card">
-                        <img src={coin.image.large} alt={coin.name} className="coin-details-image" />
+        <div className="container coin-details-container">
+            <Link to="/" className="back-link">
+                <span>←</span> Back to Dashboard
+            </Link>
+
+            <div className="details-layout">
+                {/* Left Sidebar: Main Info & Price */}
+                <div className="details-sidebar">
+                    <div className="main-info-card">
+                        <img src={coin.image.large} alt={coin.name} className="large-coin-image" />
+                        <div className="details-title-row">
+                            <h1>{coin.name}</h1>
+                            <div className="rank-badge">Rank #{coin.market_cap_rank}</div>
+                        </div>
+                        <div className="coin-price" style={{ fontSize: '2.5rem' }}>
+                            ${coin.market_data.current_price.usd.toLocaleString()}
+                        </div>
+                        <div className={`price-change ${coin.market_data.price_change_percentage_24h >= 0 ? 'positive' : 'negative'}`} style={{ fontSize: '1.1rem', padding: '0.5rem 1rem' }}>
+                            {coin.market_data.price_change_percentage_24h >= 0 ? '▲' : '▼'} {Math.abs(coin.market_data.price_change_percentage_24h).toFixed(2)}% (24h)
+                        </div>
                     </div>
-                    <p>{coin.description.en.split('. ')[0] + '.'}</p>
-                    <div className="coin-details-info">
-                        <h3>Rank: #{coin.market_cap_rank}</h3>
-                        <h3>Current Price: ${coin.market_data.current_price.usd.toLocaleString()}</h3>
-                        <h4>Market Cap: ${coin.market_data.market_cap.usd.toLocaleString()}</h4>
-                        <h4>24h High: ${coin.market_data.high_24h.usd.toLocaleString()}</h4>
-                        <h4>24h Low: ${coin.market_data.low_24h.usd.toLocaleString()}</h4>
-                        <h4>24h Price Change: {coin.market_data.price_change_percentage_24h.toFixed(2)}%</h4>
-                        <h4> Circulating Supply: {coin.market_data.circulating_supply.toLocaleString()}</h4>
-                        <h4>Total Supply: {coin.market_data.total_supply ? coin.market_data.total_supply.toLocaleString() : 'N/A'}</h4>
-                        <h4> All Time High: ${coin.market_data.ath.usd.toLocaleString()}</h4>
-                        <h4> All Time Low: ${coin.market_data.atl.usd.toLocaleString()}</h4>
-                        <h4> Last Updated: {new Date(coin.last_updated).toLocaleString()}</h4>
+
+                    <div className="stats-grid">
+                        <div className="stat-item">
+                            <div className="stat-label">Market Cap</div>
+                            <div className="stat-value">${coin.market_data.market_cap.usd.toLocaleString()}</div>
+                        </div>
+                        <div className="stat-item">
+                            <div className="stat-label">24h Volume</div>
+                            <div className="stat-value">${coin.market_data.total_volume.usd.toLocaleString()}</div>
+                        </div>
+                        <div className="stat-item">
+                            <div className="stat-label">24h High</div>
+                            <div className="stat-value" style={{ color: '#4ade80' }}>${coin.market_data.high_24h.usd.toLocaleString()}</div>
+                        </div>
+                        <div className="stat-item">
+                            <div className="stat-label">24h Low</div>
+                            <div className="stat-value" style={{ color: '#f87171' }}>${coin.market_data.low_24h.usd.toLocaleString()}</div>
+                        </div>
                     </div>
-                </>
-            )}
+                </div>
+
+                {/* Right Content: Description & Supply Info */}
+                <div className="details-main">
+                    <div className="description-section">
+                        <h2>About {coin.name}</h2>
+                        <div dangerouslySetInnerHTML={{ __html: coin.description.en.split('. ').slice(0, 3).join('. ') + '.' }} />
+                        
+                        <h2 style={{ marginTop: '3rem' }}>Market Statistics</h2>
+                        <div className="stats-grid">
+                            <div className="stat-item">
+                                <div className="stat-label">Circulating Supply</div>
+                                <div className="stat-value">{coin.market_data.circulating_supply.toLocaleString()} {coin.symbol.toUpperCase()}</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-label">Total Supply</div>
+                                <div className="stat-value">{coin.market_data.total_supply ? coin.market_data.total_supply.toLocaleString() : '∞'} {coin.symbol.toUpperCase()}</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-label">All Time High</div>
+                                <div className="stat-value">${coin.market_data.ath.usd.toLocaleString()}</div>
+                                <div className="stat-label" style={{ fontSize: '0.75rem' }}>{new Date(coin.market_data.ath_date.usd).toLocaleDateString()}</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-label">All Time Low</div>
+                                <div className="stat-value">${coin.market_data.atl.usd.toLocaleString()}</div>
+                                <div className="stat-label" style={{ fontSize: '0.75rem' }}>{new Date(coin.market_data.atl_date.usd).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        
+                        <div style={{ marginTop: '2rem', fontSize: '0.85rem', opacity: 0.6 }}>
+                            Last Updated: {new Date(coin.last_updated).toLocaleString()}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

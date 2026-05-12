@@ -1,4 +1,17 @@
-/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --secondary-gradient: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
+  --bg-dark: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent: #8b5cf6;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,269 +19,66 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0e1117;
-  color: #f0f0f0;
-  line-height: 1.6;
-  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
 }
 
-h1 {
-  margin-bottom: 2rem;
-  font-size: 2rem;
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 1rem 0;
+  }
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 a {
-  color: #fff;
+  color: inherit;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.coin-card {
-  background-color: #161b22;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
-}
-
-.coin-card:hover {
-  transform: translateY(-5px);
-}
-
-.coin-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.coin-image {
-  width: 40px;
-  height: 40px;
-}
-
-.symbol {
-  font-size: 0.9rem;
-  color: #aaa;
-}
-
-.positive {
-  color: #4caf50;
-}
-
-.negative {
-  color: #f44336;
-}
-
-/* Top Controls */
-.top-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.top-controls .filter {
-  flex: 1;
-}
-
-.top-controls .controls {
-  flex-shrink: 0;
-}
-
-/* Limit Select */
-.controls {
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 0.75rem;
-}
-
-.controls label {
-  font-weight: bold;
-}
-
-.controls select {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  background: #1c1f26;
-  color: white;
+button {
+  cursor: pointer;
   border: none;
+  font-family: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Filter Input */
-.filter {
-  margin-bottom: 2rem;
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.filter input {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: none;
-  background: #1c1f26;
-  color: #fff;
-  font-size: 1rem;
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
 }
 
-/* Top Nav */
-.top-nav {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-bottom: 1rem;
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 4px;
 }
 
-.top-nav a {
-  color: #58a6ff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.2s ease;
-}
-
-.top-nav a:hover {
-  color: #4090db;
-}
-
-/* About Page */
-.about {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: #161b22;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.about h1 {
-  margin-bottom: 1rem;
-}
-
-.about p {
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
-/* Coin Details */
-.coin-details-container {
-  max-width: 700px;
-  margin: 40px auto;
-  text-align: center;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.coin-details-container a {
-  display: inline-block;
-  margin-bottom: 20px;
-  text-decoration: none;
-  color: #007bff;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.coin-details-container a:hover {
-  color: #0056b3;
-}
-
-.coin-details-title {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
-.coin-details-image {
-  width: 100px;
-  margin-bottom: 20px;
-}
-
-.coin-details-description {
-  font-size: 16px;
-  margin-bottom: 20px;
-  color: #555;
-}
-
-.coin-details-info h3,
-.coin-details-info h4 {
-  margin: 10px 0;
-  color: #222;
-}
-
-.coin-details-info h3 {
-  font-size: 22px;
-}
-
-.coin-details-info h4 {
-  font-size: 16px;
-}
-
-.coin-details-links {
-  margin-top: 20px;
-}
-
-.coin-details-links a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.coin-details-links a:hover {
-  text-decoration: underline;
-}
-
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.3s ease;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
