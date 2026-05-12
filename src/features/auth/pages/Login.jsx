@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import InputField from '../components/common/InputField';
-import Button from '../components/common/Button';
-import GlassCard from '../components/common/GlassCard';
+import { useAuth } from '../../../app/providers/AuthContext';
+import InputField from '../../../shared/components/InputField';
+import Button from '../../../shared/components/Button';
+import GlassCard from '../../../shared/components/GlassCard';
 
 const Login = () => {
   const [email, setEmail] = useState('');

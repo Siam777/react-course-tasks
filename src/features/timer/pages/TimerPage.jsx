@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import Header from '../components/Header';
-import { useAuth } from '../context/AuthContext';
+import Header from '../../../shared/layouts/Header';
+import { useAuth } from '../../../app/providers/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const TimerApp = () => {

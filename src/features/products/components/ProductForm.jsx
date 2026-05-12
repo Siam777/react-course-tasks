@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useProducts } from '../context/ProductContext';
-import InputField from './common/InputField';
-import Button from './common/Button';
-import GlassCard from './common/GlassCard';
+import { useProducts } from '../../../app/providers/ProductContext';
+import InputField from '../../../shared/components/InputField';
+import Button from '../../../shared/components/Button';
+import GlassCard from '../../../shared/components/GlassCard';
 
 const ProductForm = ({ editingProduct, clearEditing, onSave }) => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({

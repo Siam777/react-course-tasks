@@ -1,18 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import ProductCRUD from './pages/ProductCRUD';
-import AboutPage from './pages/about';
-import CoinDetailsPage from './pages/coin-details';
-import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext';
-import { ProductProvider } from './context/ProductContext';
+import Login from '../features/auth/pages/Login';
+import Register from '../features/auth/pages/Register';
+import Dashboard from '../features/crypto/pages/Dashboard';
+import ProductPage from '../features/products/pages/ProductPage';
+import AboutPage from '../shared/pages/AboutPage';
+import CoinDetailsPage from '../features/crypto/pages/CoinDetailsPage';
+import TimerPage from '../features/timer/pages/TimerPage';
+import NotFoundPage from '../shared/pages/NotFoundPage';
+import ProtectedRoute from '../shared/layouts/ProtectedRoute';
+import { AuthProvider } from './providers/AuthContext';
+import { ProductProvider } from './providers/ProductContext';
 import './App.css';
-
-import NotFoundPage from './pages/not-found';
-
-import TimerApp from './pages/TimerApp';
 
 function App() {
   return (
@@ -27,8 +25,8 @@ function App() {
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/products" element={<ProductCRUD />} />
-              <Route path="/timer" element={<TimerApp />} />
+              <Route path="/products" element={<ProductPage />} />
+              <Route path="/timer" element={<TimerPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/coin/:id" element={<CoinDetailsPage />} />
             </Route>
