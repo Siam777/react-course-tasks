@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   flexRender,
   getCoreRowModel,
@@ -8,52 +8,50 @@ import {
 } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 
+// Columns defined outside the component to avoid useMemo and improve performance
+const columns = [
+  {
+    header: '#',
+    id: 'serial_number',
+  },
+  {
+    header: 'Coin',
+    accessorKey: 'name',
+    cell: (info) => (
+      <div className="table-coin-info">
+        <img src={info.row.original.image} alt={info.getValue()} className="table-coin-img" />
+        <span className="table-coin-name">{info.getValue()}</span>
+        <span className="table-coin-symbol">{info.row.original.symbol.toUpperCase()}</span>
+      </div>
+    ),
+  },
+  {
+    header: 'Price',
+    accessorKey: 'current_price',
+    cell: (info) => `$${info.getValue().toLocaleString()}`,
+  },
+  {
+    header: '24h Change',
+    accessorKey: 'price_change_percentage_24h',
+    cell: (info) => {
+      const value = info.getValue();
+      return (
+        <span className={value >= 0 ? 'positive' : 'negative'}>
+          {value >= 0 ? '▲' : '▼'} {Math.abs(value).toFixed(2)}%
+        </span>
+      );
+    },
+  },
+  {
+    header: 'Market Cap',
+    accessorKey: 'market_cap',
+    cell: (info) => `$${info.getValue().toLocaleString()}`,
+  },
+];
+
 const CoinTable = ({ coins }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState([]);
-
-  const columns = useMemo(
-    () => [
-      {
-        header: '#',
-        id: 'serial_number',
-      },
-      {
-        header: 'Coin',
-        accessorKey: 'name',
-        cell: (info) => (
-          <div className="table-coin-info">
-            <img src={info.row.original.image} alt={info.getValue()} className="table-coin-img" />
-            <span className="table-coin-name">{info.getValue()}</span>
-            <span className="table-coin-symbol">{info.row.original.symbol.toUpperCase()}</span>
-          </div>
-        ),
-      },
-      {
-        header: 'Price',
-        accessorKey: 'current_price',
-        cell: (info) => `$${info.getValue().toLocaleString()}`,
-      },
-      {
-        header: '24h Change',
-        accessorKey: 'price_change_percentage_24h',
-        cell: (info) => {
-          const value = info.getValue();
-          return (
-            <span className={value >= 0 ? 'positive' : 'negative'}>
-              {value >= 0 ? '▲' : '▼'} {Math.abs(value).toFixed(2)}%
-            </span>
-          );
-        },
-      },
-      {
-        header: 'Market Cap',
-        accessorKey: 'market_cap',
-        cell: (info) => `$${info.getValue().toLocaleString()}`,
-      },
-    ],
-    []
-  );
 
   const table = useReactTable({
     data: coins,
@@ -65,7 +63,7 @@ const CoinTable = ({ coins }) => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getRowId: (row) => row.id, // Stable row IDs
+    getRowId: (row) => row.id,
     initialState: {
       pagination: {
         pageSize: 10,

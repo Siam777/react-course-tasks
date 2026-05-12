@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import InputField from '../components/common/InputField';
+import Button from '../components/common/Button';
+import GlassCard from '../components/common/GlassCard';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -32,8 +35,6 @@ const Register = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Validate on change for better experience
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: validate(name, value) }));
     }
@@ -68,83 +69,68 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Create Account</h2>
-      <p className="auth-subtitle">Join us to start tracking your crypto portfolio</p>
-      
-      {serverError && <div className="error-msg">{serverError}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Full Name</label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              name="name"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-          </div>
-          {errors.name && <span className="error-text">{errors.name}</span>}
-        </div>
+    <div style={{ maxWidth: '450px', margin: '80px auto' }}>
+      <GlassCard>
+        <h2>Create Account</h2>
+        <p className="auth-subtitle">Join us to start tracking your crypto portfolio</p>
+        
+        {serverError && <div className="error-msg">{serverError}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <InputField
+            label="Full Name"
+            name="name"
+            placeholder="John Doe"
+            value={formData.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.name}
+            required
+          />
 
-        <div className="form-group">
-          <label>Email Address</label>
-          <div className="input-wrapper">
-            <input
-              type="email"
-              name="email"
-              placeholder="name@company.com"
-              value={formData.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-          </div>
-          {errors.email && <span className="error-text">{errors.email}</span>}
-        </div>
+          <InputField
+            label="Email Address"
+            name="email"
+            type="email"
+            placeholder="name@company.com"
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.email}
+            required
+          />
 
-        <div className="form-group">
-          <label>Password</label>
-          <div className="input-wrapper">
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-          </div>
-          {errors.password && <span className="error-text">{errors.password}</span>}
-        </div>
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.password}
+            required
+          />
 
-        <div className="form-group">
-          <label>Confirm Password</label>
-          <div className="input-wrapper">
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="••••••••"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              required
-            />
-          </div>
-          {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-        </div>
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.confirmPassword}
+            required
+          />
 
-        <button type="submit" className="auth-btn">Create Account</button>
-      </form>
-      
-      <div className="auth-footer">
-        Already have an account? <Link to="/login">Sign In</Link>
-      </div>
+          <Button type="submit">Create Account</Button>
+        </form>
+        
+        <div className="auth-footer">
+          Already have an account? <Link to="/login">Sign In</Link>
+        </div>
+      </GlassCard>
     </div>
   );
 };
