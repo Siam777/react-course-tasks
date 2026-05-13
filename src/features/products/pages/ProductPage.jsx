@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useProducts } from '../../../app/providers/ProductContext';
-import ProductForm from '../components/ProductForm';
 import Header from '../../../shared/layouts/Header';
 import { useAuth } from '../../../app/providers/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
+// Component-wise Lazy Loading
+const ProductForm = lazy(() => import('../components/ProductForm'));
 
 const ProductCRUD = () => {
   const { products, fetchProducts, deleteProduct, loading } = useProducts();
@@ -46,11 +48,13 @@ const ProductCRUD = () => {
               >
                 ← Back to List
               </button>
-              <ProductForm 
-                editingProduct={editingProduct} 
-                onSave={handleSave}
-                clearEditing={() => { setEditingProduct(null); setShowForm(false); }} 
-              />
+              <Suspense fallback={<div>Loading Form...</div>}>
+                <ProductForm 
+                  editingProduct={editingProduct} 
+                  onSave={handleSave}
+                  clearEditing={() => { setEditingProduct(null); setShowForm(false); }} 
+                />
+              </Suspense>
           </div>
         ) : (
           <div className="list-view">
@@ -58,6 +62,9 @@ const ProductCRUD = () => {
               <div>
                 <h2>Product Inventory</h2>
                 <p>Manage your professional catalog with ease</p>
+                <Link to="/products/details" style={{ color: 'white', textDecoration: 'underline', fontSize: '0.9rem' }}>
+                  View Demo Child Route
+                </Link>
               </div>
               <button className="btn-add" onClick={() => setShowForm(true)}>
                 + Create Product

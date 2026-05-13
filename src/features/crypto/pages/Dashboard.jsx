@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useAuth } from '../../../app/providers/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import HomePage from "./HomePage";
 import Header from "../../../shared/layouts/Header";
+
+// Component-wise Lazy Loading
+const HomePage = lazy(() => import("./HomePage"));
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -50,17 +52,19 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <Header user={user} onLogout={handleLogout} />
       <main className="container">
-        <HomePage
-          coins={coins}
-          filter={filter}
-          setFilter={setFilter}
-          limit={limit}
-          setLimit={setLimit}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          loading={loading}
-          error={error} 
-        />
+        <Suspense fallback={<div>Loading Dashboard Content...</div>}>
+          <HomePage
+            coins={coins}
+            filter={filter}
+            setFilter={setFilter}
+            limit={limit}
+            setLimit={setLimit}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            loading={loading}
+            error={error} 
+          />
+        </Suspense>
       </main>
     </div>
   );
